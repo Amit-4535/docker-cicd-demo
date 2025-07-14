@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "amit4535/demo"
-        DOCKER_HOST = "ubuntu@<DOCKER_INSTANCE_PUBLIC_IP>"
+        DOCKER_HOST_IP = "18.212.5.239"     // Used only in deploy stage
     }
 
     stages {
@@ -32,11 +32,11 @@ pipeline {
             steps {
                 sshagent(credentials: ['docker-host']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no $DOCKER_HOST '
-                      docker pull $IMAGE_NAME:latest &&
-                      docker stop demo || true &&
-                      docker rm demo || true &&
-                      docker run -d --name demo -p 80:80 $IMAGE_NAME:latest
+                    ssh -o StrictHostKeyChecking=no root@$DOCKER_HOST_IP '
+                        docker pull $IMAGE_NAME:latest &&
+                        docker stop demo || true &&
+                        docker rm demo || true &&
+                        docker run -d --name demo -p 80:80 $IMAGE_NAME:latest
                     '
                     """
                 }
