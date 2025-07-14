@@ -3,10 +3,11 @@ pipeline {
 
     environment {
         IMAGE_NAME = "amit4535/demo"
-        DOCKER_HOST_IP = "18.212.5.239"     // Used only in deploy stage
+        DOCKER_HOST_IP = "18.212.5.239"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git 'https://github.com/Amit-4535/docker-cicd-demo.git'
@@ -32,7 +33,7 @@ pipeline {
             steps {
                 sshagent(credentials: ['docker_jenkins_connection']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no root@${DOCKER_HOST_IP} '
+                        ssh -o StrictHostKeyChecking=no root@$DOCKER_HOST_IP '
                             docker pull $IMAGE_NAME:latest &&
                             docker stop demo || true &&
                             docker rm demo || true &&
