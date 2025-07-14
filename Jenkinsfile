@@ -31,7 +31,7 @@ pipeline {
 
         stage('Deploy to Docker Host') {
             steps {
-                sshagent(credentials: ['docker_jenkins_connection']) {
+                sshagent(credentials: ['docker_jenkins_connection1']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no root@$DOCKER_HOST_IP '
                             docker pull $IMAGE_NAME:latest &&
