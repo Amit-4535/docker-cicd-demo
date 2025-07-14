@@ -29,18 +29,16 @@ pipeline {
         }
 
         stage('Deploy to Docker Host') {
-            steps {
-                sshagent(credentials: ['docker-host']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no root@$DOCKER_HOST_IP '
-                        docker pull $IMAGE_NAME:latest &&
-                        docker stop demo || true &&
-                        docker rm demo || true &&
-                        docker run -d --name demo -p 80:80 $IMAGE_NAME:latest
-                    '
-                    """
-                }
-            }
+    steps {
+        sshagent(credentials: ['docker_jenkins_connection']) {
+            sh """
+                ssh -o StrictHostKeyChecking=no root@<DOCKER_INSTANCE_PUBLIC_IP> '
+                    docker pull amit4535/demo:latest &&
+                    docker stop demo || true &&
+                    docker rm demo || true &&
+                    docker run -d --name demo -p 80:80 amit4535/demo:latest
+                '
+            """
         }
     }
 }
